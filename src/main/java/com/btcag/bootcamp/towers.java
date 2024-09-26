@@ -18,6 +18,7 @@ public class towers {
 
     public static void main(String[] args) {
         while (!solved()) {
+            printTowers();
             System.out.println("Welche Scheibe möchtest du bewegen?");
             move = input.nextInt();
 
@@ -26,25 +27,6 @@ public class towers {
 
             System.out.println("Auf welchen Turm?");
             moveDest = input.nextInt();
-
-            if (moveStart == 1) {
-                System.out.println(casesTowerOne());
-            } else if (moveStart == 2) {
-                System.out.println(casesTowerTwo());
-            } else if (moveStart == 3) {
-                System.out.println(casesTowerThree());
-            } else {
-                printTowers();
-                System.out.println("Ungültiger Zug.");
-                System.out.println("Welche Scheibe möchtest du bewegen?");
-                move = input.nextInt();
-
-                System.out.println("Von welchem Turm?");
-                moveStart = input.nextInt();
-
-                System.out.println("Auf welchen Turm?");
-                moveDest = input.nextInt();
-            }
 
         }
 
@@ -57,15 +39,16 @@ public class towers {
 
     public static void printTowers() {
         if (moveStart == 1) {
-            casesTowerOne();
+            System.out.println(casesTowerOne());
         } else if (moveStart == 2) {
-            casesTowerTwo();
+            System.out.println(casesTowerTwo());
         } else if (moveStart == 3) {
-            casesTowerThree();
+            System.out.println(casesTowerThree());
+        } else {
+            System.out.println("Turm 1: " + java.util.Arrays.toString(towerOne));
+            System.out.println("Turm 2: " + java.util.Arrays.toString(towerTwo));
+            System.out.println("Turm 3: " + java.util.Arrays.toString(towerThree));
         }
-        System.out.println("Turm 1: " + java.util.Arrays.toString(towerOne));
-        System.out.println("Turm 2: " + java.util.Arrays.toString(towerTwo));
-        System.out.println("Turm 3: " + java.util.Arrays.toString(towerThree));
     }
 
     public static String casesTowerOne() {
