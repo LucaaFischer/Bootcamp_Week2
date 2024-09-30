@@ -22,11 +22,13 @@ public class connectFour {
 
         System.out.println(players[0] + " Hat die " + coins[0] + " Münzen.");
 
-        while (turn <= maxTurns) {
+        while (turn <= maxTurns && !checkWin()) {
             game();
             turn++;
         }
-        System.out.println("Unentschieden. Das Spielfeld ist voll.");
+        if (turn >= maxTurns && !checkWin()) {
+            System.out.println("Unentschieden. Das Spielfeld ist voll.");
+        }
     }
 
     //-------------------------------------------------------------------Namenseingabe------------------------------------------------------------------------------
@@ -79,7 +81,7 @@ public class connectFour {
             } else {
                 winner = players[1];
             }
-            System.out.println("AND THE WINNER ISSS " + winner + "!");
+            System.out.println("AND THE WINNER ISSS " + winner.toUpperCase() + "!");
         }
     }
 
@@ -99,12 +101,13 @@ public class connectFour {
 
     //--------------------------------------------------------------Münze nach unten fallen lassen---------------------------------------------------------------
     public static void fallingDown() {
+        column--;
         for (int row = board.length - 1; row >= 0; row--) {
             if (board[row][column] != 'X' && board[row][column] != 'O') {
                 if (turn % 2 == 0) {
-                    board[row][column - 1] = coins[0].charAt(0);
+                    board[row][column] = coins[0].charAt(0);
                 } else {
-                    board[row][column - 1] = coins[1].charAt(0);
+                    board[row][column] = coins[1].charAt(0);
                 }
                 break;
             }
@@ -156,9 +159,9 @@ public class connectFour {
         for (char[] row : board) {
             for (char cell : row) {
                 if (cell == 'O' || cell == 'X') {
-                    System.out.print("[" + cell + "]");
+                    System.out.print("[  " + cell + "   ]");
                 } else {
-                    System.out.print("[ ]");
+                    System.out.print("[      ]");
                 }
             }
             System.out.println();
