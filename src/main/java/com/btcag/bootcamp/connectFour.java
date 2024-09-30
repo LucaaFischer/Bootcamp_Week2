@@ -3,6 +3,7 @@ package com.btcag.bootcamp;
 import java.util.Scanner;
 
 //------------------------------------------------------------------Mehrfach benötigte Variablen---------------------------------------------------------------
+
 public class connectFour {
     public static Scanner input = new Scanner(System.in);
     public static String[] players = getPlayers();
@@ -11,22 +12,19 @@ public class connectFour {
     public static int turn = 1;
     public static int maxTurns = 42;
 
-    public static char[][] board = new char[7][6];
-    public static int rows = 6;
-    public static int columns = 7;
+    public static char[][] board = new char[6][7];
 
-    public static int move = 0;
-
+    public static int column = 0;
 
     //-----------------------------------------------------------------------------Main------------------------------------------------------------------------------
     public static void main(String[] args) {
         System.out.println("Willkommen zu Vier-Gewinnt " + players[0] + " und " + players[1] + "!");
 
-        System.out.println(players[0] + "Hat die " + coins[0] + "Münzen.");
+        System.out.println(players[0] + " Hat die " + coins[0] + " Münzen.");
 
-        while (turn < maxTurns) {
+        while (turn <= maxTurns) {
+            game();
             turn++;
-            board();
         }
         System.out.println("Unentschieden. Das Spielfeld ist voll.");
     }
@@ -45,10 +43,11 @@ public class connectFour {
 
     //---------------------------------------------------------------------Münzwahl----------------------------------------------------------------------------------------
     public static String[] getCoins() {
+        String[] coins = new String[2];
         System.out.println("Wähle ein Zeichen als Münze, X oder O " + players[0]);
         coins[0] = input.nextLine();
 
-        while (coins[0] != "X" && coins[0] != "O") {
+        while (!coins[0].equals("X") && !coins[0].equals("O")) {
             System.out.println("Deine Münze muss X oder O sein.");
             System.out.println("Bitte gib erneut deine Wunschmünze ein");
             coins[0] = input.nextLine();
@@ -64,29 +63,103 @@ public class connectFour {
 
     //----------------------------------------------------------------------Game--------------------------------------------------------------------------------
     public static void game() {
+        String winner = "";
         if (turn % 2 == 0) {
             System.out.println("In welche Spalte möchtest du deine Münze werfen, " + players[0] + "?");
-            move = input.nextInt();
         } else {
             System.out.println("In welche Spalte möchtest du deine Münze werfen, " + players[1] + "?");
-            move = input.nextInt();
         }
-    }
-
-    //-------------------------------------------------------------Prüfen auf Gültigkeit des Zugs------------------------------------------------------------------
-    public static void isValid() {
+        column = input.nextInt();
+        isValid();
+        fallingDown();
         printBoard();
-        if((rows[i] != "" && move == rows[i]) || (columns[j] != "" && move == columns[j])) {
-            System.out.println("Der gewünschte Zug ist ungültig. Bitte nochmal einwerfen.");
-            move = input.nextInt();
+        if (checkWin()) {
+            if (turn % 2 == 0) {
+                winner = players[0];
+            } else {
+                winner = players[1];
+            }
+            System.out.println("AND THE WINNER ISSS " + winner + "!");
         }
     }
 
-    //--------------------------------------------------------------------Spielfeld--------------------------------------------------------------------------------
+    //----------------------------------------------------------------Prüfen ob Zug gültig ist-----------------------------------------------------------------
+
+    public static void isValid() {
+        if (column > 7 || column < 1) {
+            if (turn % 2 == 0) {
+                System.out.println("Zug ungültig. Mach nochmal " + players[0] + ".");
+            } else {
+                System.out.println("Zug ungültig. Mach nochmal " + players[1] + ".");
+            }
+            column = input.nextInt();
+            isValid();
+        }
+    }
+
+    //--------------------------------------------------------------Münze nach unten fallen lassen---------------------------------------------------------------
+    public static void fallingDown() {
+        for (int row = board.length - 1; row >= 0; row--) {
+            if (board[row][column] != 'X' && board[row][column] != 'O') {
+                if (turn % 2 == 0) {
+                    board[row][column - 1] = coins[0].charAt(0);
+                } else {
+                    board[row][column - 1] = coins[1].charAt(0);
+                }
+                break;
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------Prüfen auf Winner---------------------------------------------------------------------------
+    public static boolean checkWin() {
+        char[] coins = {'O', 'X'};
+        for (char coin : coins) {
+            //--------------------------------------------------------------------Horizontal------------------------------------------------------------------------------------------
+            for (int i = 0; i <= 5; i++) {
+                for (int j = 1; j <= 4; j++) {
+                    if (board[i][j] == coin && board[i][j + 1] == coin && board[i][j + 2] == coin && board[i][j + 3] == coin) {
+                        return true;
+                    }
+                }
+            }
+            //-------------------------------------------------------------------Vertikal--------------------------------------------------------------------------------------------
+            for (int i = 0; i < 7; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[j][i] == coin && board[j + 1][i] == coin && board[j + 2][i] == coin && board[j + 3][i] == coin) {
+                        return true;
+                    }
+                }
+            }
+            //------------------------------------------------------------------Oben Links --> unten rechts-----------------------------------------------------------------------------
+            for (int i = 3; i < 6; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j] == coin && board[i - 1][j + 1] == coin && board[i - 2][j + 2] == coin && board[i - 3][j + 3] == coin) {
+                        return true;
+                    }
+                }
+            }
+            //-----------------------------------------------------------------Oben rechts --> unten links---------------------------------------------------------------------------------
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (board[i][j] == coin && board[i + 1][j + 1] == coin && board[i + 2][j + 2] == coin && board[i + 3][j + 3] == coin) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    //--------------------------------------------------------------------------------Spielfeld--------------------------------------------------------------------------------
     public static void printBoard() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                System.out.print(board[i][j]);
+        for (char[] row : board) {
+            for (char cell : row) {
+                if (cell == 'O' || cell == 'X') {
+                    System.out.print("[" + cell + "]");
+                } else {
+                    System.out.print("[ ]");
+                }
             }
             System.out.println();
         }
