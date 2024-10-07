@@ -11,8 +11,8 @@ public class towers {
     public static int[] towerThree = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     public static int temp = 0;
+    public static boolean isValid = false;
 
-    public static int move = 0;
     public static int moveStart = 0;
     public static int moveDest = 0;
 
@@ -30,7 +30,7 @@ public class towers {
             printTowers();
 
             System.out.println("Welche Scheibe möchtest du bewegen?");
-            move = input.nextInt();
+            System.out.println();
 
             System.out.println("Von welchem Turm?");
             moveStart = input.nextInt();
@@ -48,12 +48,12 @@ public class towers {
     }
 
     //----------------------------------------------------------------------Türme ausgeben--------------------------------------------------------------------------------------
-    public static String printTowers() {
+    public static void printTowers() {
         casesTowerOne();
         casesTowerTwo();
         casesTowerThree();
 
-        return ("Turm 1: " + java.util.Arrays.toString(towerOne) + "\n" +
+        System.out.println("Turm 1: " + java.util.Arrays.toString(towerOne) + "\n" +
                 "Turm 2: " + java.util.Arrays.toString(towerTwo) + "\n" +
                 "Turm 3: " + java.util.Arrays.toString(towerThree));
     }
@@ -100,15 +100,18 @@ public class towers {
                     temp = towerOne[i];
                     towerOne[i] = towerTwo[i];
                     towerTwo[i] = temp;
+                    isValid = true;
 
                 } else if (moveDest == 3 && maxDiskT1() < maxDiskT3()) {
                     temp = towerOne[i];
                     towerOne[i] = towerThree[i];
                     towerThree[i] = temp;
+                    isValid = true;
 
-                } else {
-                    System.out.println("Zug nicht möglich.");
                 }
+            }
+            if(!isValid) {
+                System.out.println("Zug nicht möglich. Mach nochmal!");
             }
         }
     }
@@ -121,15 +124,18 @@ public class towers {
                     temp = towerTwo[i];
                     towerTwo[i] = towerOne[i];
                     towerOne[i] = temp;
+                    isValid = true;
 
                 } else if (moveDest == 3 && maxDiskT2() < maxDiskT3()) {
                     temp = towerTwo[i];
                     towerTwo[i] = towerThree[i];
                     towerThree[i] = temp;
+                    isValid = true;
 
-                } else {
-                    System.out.println("Zug nicht möglich.");
                 }
+            }
+            if(!isValid) {
+                System.out.println("Zug nicht möglich. Mach nochmal!");
             }
         }
     }
@@ -142,15 +148,18 @@ public class towers {
                     temp = towerThree[i];
                     towerThree[i] = towerOne[i];
                     towerOne[i] = temp;
+                    isValid = true;
 
                 } else if (moveDest == 2 && maxDiskT3() < maxDiskT2()) {
                     temp = towerThree[i];
                     towerThree[i] = towerTwo[i];
                     towerTwo[i] = temp;
+                    isValid = true;
 
-                } else {
-                    System.out.println("Zug nicht möglich.");
                 }
+            }
+            if(!isValid) {
+                System.out.println("Zug nicht möglich. Mach nochmal!");
             }
         }
     }
